@@ -4,6 +4,18 @@
 #include <vector>
 
 std::string transformChar(const char in_char){
+
+    /*Takes an input character. If it is a letter, capitalises it. If it is a number returns the number as a capitalised word.
+    Any other character returns an empty sting "".
+        
+    const char in_char: The input character to be changed
+    
+    return: Either:
+        - A capital letter as a string
+        - A number in capitalised word form
+        - An empty sting for any other character
+    */
+
     if (std::isalpha(in_char)) {
             char upper = std::toupper(in_char);
             std::string char_string {upper};
