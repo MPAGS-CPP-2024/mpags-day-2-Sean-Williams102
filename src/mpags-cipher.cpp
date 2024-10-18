@@ -111,7 +111,7 @@ bool ProcessCommandLine(const std::vector<std::string>& args,
     }
 
     // Handle help, if requested
-    if (helpRequested) {
+    /*if (helpRequested) {
         // Line splitting for readability
         std::cout
             << "Usage: mpags-cipher [-h/--help] [--version] [-i <file>] [-o <file>]\n\n"
@@ -135,7 +135,7 @@ bool ProcessCommandLine(const std::vector<std::string>& args,
     if (versionRequested) {
         std::cout << "0.1.0" << std::endl;
         return 0;
-    }
+    }*/
     return 0;
     }
 
@@ -151,7 +151,33 @@ int main(int argc, char* argv[])
     std::string inputFile{""};
     std::string outputFile{""};
 
-    bool CommandLineArgs {ProcessCommandLine(cmdLineArgs, helpRequested, versionRequested, inputFile, outputFile)};
+    const bool CommandLineArgs {ProcessCommandLine(cmdLineArgs, helpRequested, versionRequested, inputFile, outputFile)};
+
+    if (helpRequested) {
+        // Line splitting for readability
+        std::cout
+            << "Usage: mpags-cipher [-h/--help] [--version] [-i <file>] [-o <file>]\n\n"
+            << "Encrypts/Decrypts input alphanumeric text using classical ciphers\n\n"
+            << "Available options:\n\n"
+            << "  -h|--help        Print this help message and exit\n\n"
+            << "  --version        Print version information\n\n"
+            << "  -i FILE          Read text to be processed from FILE\n"
+            << "                   Stdin will be used if not supplied\n\n"
+            << "  -o FILE          Write processed text to FILE\n"
+            << "                   Stdout will be used if not supplied\n\n"
+            << std::endl;
+        // Help requires no further action, so return from main
+        // with 0 used to indicate success;
+    return 0;
+    }
+
+    // Handle version, if requested
+    // Like help, requires no further action,
+    // so return from main with zero to indicate success
+    if (versionRequested) {
+        std::cout << "0.1.0" << std::endl;
+        return 0;
+    }
 
     // Process command line arguments - ignore zeroth element, as we know this
     // to be the program name and don't need to worry about it
