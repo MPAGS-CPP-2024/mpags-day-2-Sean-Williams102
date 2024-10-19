@@ -72,54 +72,48 @@ int main(int argc, char* argv[])
 
     // Read in user input from stdin/file
     // Warn that input file option not yet implemented
+
     if (!inputFile.empty()) {
-        std::cerr << "[warning] input from file ('" << inputFile
-                  << "') not implemented yet, using stdin\n";
-        
-        while (std::cin >> inputChar) {
+        //Open the file and check that you are able to read from it
+        std::ifstream inputStream{inputFile};
+        // If the input file is not able to be read from, give warning message and return error code (1)
+        if (!inputStream.good()) {
+            std::cerr << "[error] failed to create istream on file '" << inputFile
+                  << "'" << std::endl;
+            return 1;
+        }
+        // If the input file is good, loop over each character from the file
+        while (inputStream >> inputChar) {
             // Uppercase alphabetic characters
             inputText += std::string {transformChar(inputChar)};
         }
 
     }
-    else {
-        std::string name {inputFile};
-        std::ifstream in_file {name};
-        bool ok_to_read = in_file.good();
-        if (ok_to_read){
-            while (in_file >> inputChar) {
-                // Uppercase alphabetic characters
-                inputText += std::string {transformChar(inputChar)};
+    //If no input file is given, loop over the user input as before
+    else{
+        while (std::cin >> inputChar) {
+            // Uppercase alphabetic characters
+            inputText += std::string {transformChar(inputChar)};
             }
         }
-    }
-
     
 
-    // loop over each character from user input
-
-    /*if (ok_to_read) {
-        while (in_file >> inputChar) {
-            // Uppercase alphabetic characters
-            inputText += std::string {transformChar(inputChar)};
-        }
-    }
-    else {
-        while (std::cin >> inputChar) {
-            // Uppercase alphabetic characters
-            inputText += std::string {transformChar(inputChar)};
-        }
-    }*/
-
-    // Print out the transliterated text
-
-    // Warn that output file option not yet implemented
+    //Output the capitalised text to an stdout/file
     if (!outputFile.empty()) {
-        std::cerr << "[warning] output to file ('" << outputFile
-                  << "') not implemented yet, using stdout\n";
+        //Open the file and check that you are able to write to it
+        std::ofstream outputStream{outputFile};
+        if (!outputStream.good()) {
+            std::cerr << "[error] failed to create ostream on file '" << outputFile
+                  << "'" << std::endl;
+            return 1;
+        }
+        //If able to write, print the generated text to the file
+        outputStream << inputText << std::endl;
     }
-
-    std::cout << inputText << std::endl;
+    //If no output file, print the text to the screen instead
+    else {
+        std::cout << inputText << std::endl;
+    }
 
     // No requirement to return from main, but we do so for clarity
     // and for consistency with other functions
