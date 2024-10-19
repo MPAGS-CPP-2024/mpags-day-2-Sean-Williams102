@@ -1,7 +1,6 @@
 #include <cctype>
 #include <iostream>
 #include <string>
-#include <vector>
 
 //Our project headers
 #include "TransformChar.hpp"

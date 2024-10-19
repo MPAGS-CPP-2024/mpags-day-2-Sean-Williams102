@@ -7,6 +7,7 @@
 //Our project headers
 #include "TransformChar.hpp"
 #include "ProcessCommandLine.hpp"
+#include "runCaesarCipher.hpp"
 
 //! Transliterate char to string
 std::string transformChar(const char in);
@@ -15,9 +16,13 @@ std::string transformChar(const char in);
 bool ProcessCommandLine(const std::vector<std::string>& args,
                         bool& helpRequested,
                         bool& versionRequested,
+                        bool& encrypt,
+                        size_t& key,
                         std::string& inputFileName,
                         std::string& outputFileName);
 
+// Execute the Caesar Cipher
+std::string runCaesarCipher(const std::string& inputText, const size_t key, const bool encrypt);
 
 int main(int argc, char* argv[])
 {
@@ -27,10 +32,12 @@ int main(int argc, char* argv[])
     // Options that might be set by the command-line arguments
     bool helpRequested{false};
     bool versionRequested{false};
+    bool encrypt{true}; //Default is set to encrypt rather than decrypt
+    size_t key = 0; //Defualt set to no encryption
     std::string inputFile{""};
     std::string outputFile{""};
 
-    const bool CommandLineArgs {ProcessCommandLine(cmdLineArgs, helpRequested, versionRequested, inputFile, outputFile)};
+    const bool CommandLineArgs {ProcessCommandLine(cmdLineArgs, helpRequested, versionRequested, encrypt, key, inputFile, outputFile)};
 
     if (CommandLineArgs == 1) {
         std::cout << "ERROR" << std::endl;
@@ -45,6 +52,9 @@ int main(int argc, char* argv[])
             << "Available options:\n\n"
             << "  -h|--help        Print this help message and exit\n\n"
             << "  --version        Print version information\n\n"
+            << "  --encrypt        Set the Caesar Cipher to encrypt\n\n"
+            << "  --decrypt        Set the Caesar Cipher to decrypt\n\n"
+            << "  --key INTEGER    Value of the key to be used for the Caesar Cipher\n\n"
             << "  -i FILE          Read text to be processed from FILE\n"
             << "                   Stdin will be used if not supplied\n\n"
             << "  -o FILE          Write processed text to FILE\n"
@@ -96,6 +106,8 @@ int main(int argc, char* argv[])
             inputText += std::string {transformChar(inputChar)};
             }
         }
+
+    std::string Caesar_text {runCaesarCipher(inputText, key,  encrypt)};
     
 
     //Output the capitalised text to an stdout/file

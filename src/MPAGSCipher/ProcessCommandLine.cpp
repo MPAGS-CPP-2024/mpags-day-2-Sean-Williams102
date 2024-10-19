@@ -7,6 +7,8 @@
 bool ProcessCommandLine(const std::vector<std::string>& args,
                         bool& helpRequested,
                         bool& versionRequested,
+                        bool& encrypt,
+                        size_t& key,
                         std::string& inputFileName,
                         std::string& outputFileName){
 
@@ -15,6 +17,8 @@ bool ProcessCommandLine(const std::vector<std::string>& args,
     const std::vector<std::string>& args - A vector of strings of the command line inputs 
     bool& helpRequested - Reference argument specifying whether the --help command has been input
     bool& versionRequested - Reference argument specifying whether the --version command has been input
+    bool& encrypt - Specifies whether to use the Caesar Cipher to encrypt or decrypt the message
+    size_t& key - The key for the Caesar Cipher
     std::string& inputFileName - Reference argument containing the name of the input file name
     std::string& outputFileName - Reference argument containing the name of the output file name
 
@@ -29,6 +33,22 @@ bool ProcessCommandLine(const std::vector<std::string>& args,
             helpRequested = true;
         } else if (args[i] == "--version") {
             versionRequested = true;
+        } else if (args[i] == "--encrypt") {
+            continue; //default is already set to encrypt so can just continue
+        } else if (args[i] == "--decrypt") {
+            encrypt = false;
+        } else if (args[i] == "--key") {
+            // Next element is value of key unless "-key" is the last argument
+            if (i == nCmdLineArgs - 1) {
+                std::cerr << "[error] -key requires a value argument"
+                          << std::endl;
+                // exit main with non-zero return to indicate failure
+                return 1;
+            } else {
+                // Got key value, so assign value and advance past it
+                key = stol(args[i + 1]);
+                ++i;
+            }
         } else if (args[i] == "-i") {
             // Handle input file option
             // Next element is filename unless "-i" is the last argument
